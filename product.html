@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product — ShopMKT</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <style>
+    .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin: 40px 0; }
+    .product-images { position: sticky; top: 80px; }
+    .main-image { border-radius: var(--radius); overflow: hidden; aspect-ratio: 1; background: var(--surface); border: 1px solid var(--border); margin-bottom: 12px; }
+    .main-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+    .main-image:hover img { transform: scale(1.06); }
+    .thumbnails { display: flex; gap: 10px; }
+    .thumb { width: 70px; height: 70px; border-radius: 8px; overflow: hidden; border: 2px solid var(--border); cursor: pointer; transition: var(--transition); flex-shrink: 0; background: var(--surface-2); }
+    .thumb.active { border-color: var(--primary); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    .product-info { display: flex; flex-direction: column; gap: 20px; }
+    .product-badge-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .info-badge { padding: 4px 12px; border-radius: 30px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; }
+    .badge-cat { background: rgba(245,166,35,0.1); color: var(--primary); border: 1px solid var(--border-accent); }
+    .badge-sale { background: rgba(232,69,69,0.1); color: var(--accent); border: 1px solid rgba(232,69,69,0.2); }
+    .badge-stock-ok { background: rgba(46,204,113,0.1); color: var(--success); border: 1px solid rgba(46,204,113,0.2); }
+    .badge-stock-low { background: rgba(243,156,18,0.1); color: var(--warning); border: 1px solid rgba(243,156,18,0.2); }
+
+    .product-title { font-size: 1.8rem; line-height: 1.25; }
+    .price-section { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .price-main { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--primary); }
+    .price-old { font-size: 1.1rem; color: var(--text-dim); text-decoration: line-through; }
+    .price-save { background: rgba(46,204,113,0.12); color: var(--success); font-size: 0.85rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; }
+
+    .seller-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; display: flex; align-items: center; gap: 14px; }
+    .seller-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--primary); color: var(--dark); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; font-family: 'Syne', sans-serif; flex-shrink: 0; }
+    .seller-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 2px; }
+    .seller-meta { font-size: 0.78rem; color: var(--text-muted); }
+
+    .qty-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .qty-label { font-size: 0.85rem; color: var(--text-muted); }
+    .qty-control-lg { display: flex; align-items: center; background: var(--surface-2); border: 1.5px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+    .qty-btn-lg { width: 42px; height: 42px; background: none; border: none; color: var(--text); font-size: 1.3rem; cursor: pointer; transition: background 0.2s; }
+    .qty-btn-lg:hover { background: var(--primary); color: var(--dark); }
+    .qty-num-lg { width: 50px; text-align: center; font-weight: 700; font-size: 1rem; border: none; background: none; color: var(--text); }
+
+    .action-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .action-row .btn { flex: 1; min-width: 160px; }
+
+    .product-desc { line-height: 1.8; color: var(--text-muted); font-size: 0.95rem; }
+    .specs-table { width: 100%; border-collapse: collapse; }
+    .specs-table tr { border-bottom: 1px solid var(--border); }
+    .specs-table td { padding: 10px 0; font-size: 0.875rem; }
+    .specs-table td:first-child { color: var(--text-muted); width: 40%; }
+    .specs-table td:last-child { font-weight: 500; }
+
+    .related-section { margin: 60px 0; }
+
+    @media (max-width: 900px) { .product-layout { grid-template-columns: 1fr; } .product-images { position: static; } }
+  </style>
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="container" id="product-container">
+  <div style="margin:30px 0 20px;font-size:0.875rem;color:var(--text-muted)">
+    <a href="../index.html" style="color:var(--primary)">Home</a> › <a href="search.html" style="color:var(--primary)">Products</a> › <span id="breadcrumb-name">Loading…</span>
+  </div>
+  <div class="product-layout">
+    <div class="product-images">
+      <div class="main-image"><img id="main-img" src="" alt=""></div>
+      <div class="thumbnails" id="thumbs"></div>
+    </div>
+    <div class="product-info" id="product-info">
+      <div class="skeleton" style="height:30px;width:60%"></div>
+      <div class="skeleton" style="height:50px"></div>
+      <div class="skeleton" style="height:40px;width:40%"></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script type="module">
+import { buildNavbar, getProduct, addToCart, cartFlyAnimation, formatPrice, toast, updateNavUI, updateCartBadge } from '../js/app.js';
+
+document.getElementById('nav-root').innerHTML = buildNavbar();
+updateNavUI(); updateCartBadge();
+
+const params = new URLSearchParams(window.location.search);
+const productId = params.get('id');
+
+let qty = 1;
+let product = null;
+
+// Demo fallback products
+const DEMO_PRODUCTS = {
+  d1: { id:'d1', name:'iPhone 15 Pro Max 256GB', price:850000, oldPrice:950000, category:'Electronics', seller:'TechHub NG', sellerRating:4.8, stock:15, image:'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800&q=80', description:'Experience the power of Apple A17 Pro chip. The iPhone 15 Pro Max features a titanium design, Action Button, USB 3 connection, and the most advanced camera system on any iPhone.' },
+  d2: { id:'d2', name:'Air Max 270 Sneakers', price:45000, oldPrice:60000, category:'Fashion', seller:'KickZone', stock:32, image:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80', description:'Nike Air Max 270 features Nike\'s biggest heel Air unit yet, delivering unbeatable cushioning and a modern lifestyle look.' },
+};
+
+async function loadProduct() {
+  try {
+    product = productId ? await getProduct(productId) : null;
+    if (!product) product = DEMO_PRODUCTS[productId] || DEMO_PRODUCTS['d1'];
+    renderProduct(product);
+  } catch(e) {
+    product = DEMO_PRODUCTS['d1'];
+    renderProduct(product);
+  }
+}
+
+function renderProduct(p) {
+  document.title = `${p.name} — ShopMKT`;
+  document.getElementById('breadcrumb-name').textContent = p.name;
+
+  const img = p.image || p.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&size=800&background=252535&color=F5A623`;
+  document.getElementById('main-img').src = img;
+  document.getElementById('main-img').alt = p.name;
+
+  // Thumbnails (use same image for MVP)
+  const thumbs = [img, img, img].slice(0, 3);
+  document.getElementById('thumbs').innerHTML = thumbs.map((t, i) =>
+    `<div class="thumb ${i===0?'active':''}" onclick="switchImg('${t}',this)"><img src="${t}" alt=""></div>`
+  ).join('');
+
+  const stockBadge = (p.stock || 0) < 5
+    ? `<span class="info-badge badge-stock-low">⚠️ Only ${p.stock} left</span>`
+    : `<span class="info-badge badge-stock-ok">✅ In Stock</span>`;
+
+  const oldPrice = p.oldPrice ? `<span class="price-old">${formatPrice(p.oldPrice)}</span>` : '';
+  const savings = p.oldPrice ? `<span class="price-save">Save ${Math.round((1-p.price/p.oldPrice)*100)}%</span>` : '';
+  const sellerInitial = (p.seller||p.sellerName||'S')[0].toUpperCase();
+
+  document.getElementById('product-info').innerHTML = `
+    <div class="product-badge-row">
+      <span class="info-badge badge-cat">${p.category || 'General'}</span>
+      ${p.oldPrice ? '<span class="info-badge badge-sale">🏷️ On Sale</span>' : ''}
+      ${stockBadge}
+    </div>
+
+    <h1 class="product-title">${p.name}</h1>
+
+    <div class="stars">
+      ${'★'.repeat(4)}★ <span style="font-size:0.8rem;color:var(--text-muted);margin-left:6px">(4.7) 124 reviews</span>
+    </div>
+
+    <div class="price-section">
+      <span class="price-main">${formatPrice(p.price)}</span>
+      ${oldPrice} ${savings}
+    </div>
+
+    <div class="seller-card">
+      <div class="seller-avatar">${sellerInitial}</div>
+      <div>
+        <div class="seller-name">${p.seller || p.sellerName || 'Verified Seller'}</div>
+        <div class="seller-meta">⭐ ${p.sellerRating || 4.5} · 200+ sales · Verified Seller</div>
+      </div>
+      <a href="search.html?seller=${encodeURIComponent(p.seller||'')}" class="btn btn-ghost btn-sm" style="margin-left:auto">View Store</a>
+    </div>
+
+    <div>
+      <p class="product-desc">${p.description || 'Premium quality product from a verified ShopMKT seller. Fast delivery available.'}</p>
+    </div>
+
+    <div class="qty-row">
+      <span class="qty-label">Quantity:</span>
+      <div class="qty-control-lg">
+        <button class="qty-btn-lg" id="qty-minus">−</button>
+        <span class="qty-num-lg" id="qty-display">1</span>
+        <button class="qty-btn-lg" id="qty-plus">+</button>
+      </div>
+      <span style="font-size:0.8rem;color:var(--text-dim)">(${p.stock || '∞'} available)</span>
+    </div>
+
+    <div class="action-row">
+      <button class="btn btn-primary btn-lg" id="atc-btn">🛒 Add to Cart</button>
+      <button class="btn btn-outline btn-lg" id="buy-now-btn">⚡ Buy Now</button>
+    </div>
+
+    <div style="display:flex;gap:16px;font-size:0.82rem;color:var(--text-muted);flex-wrap:wrap">
+      <span>🚚 Free delivery on orders over ₦50,000</span>
+      <span>↩️ 30-day return policy</span>
+      <span>🔒 Secure payment</span>
+    </div>
+
+    <details style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden">
+      <summary style="padding:14px 16px;cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between">
+        Product Specifications <span>▾</span>
+      </summary>
+      <div style="padding:0 16px 16px">
+        <table class="specs-table">
+          <tr><td>Brand</td><td>${p.brand || p.seller || 'ShopMKT'}</td></tr>
+          <tr><td>Category</td><td>${p.category || 'General'}</td></tr>
+          <tr><td>Availability</td><td>${p.stock > 0 ? 'In Stock' : 'Out of Stock'}</td></tr>
+          <tr><td>Seller</td><td>${p.seller || 'Verified Seller'}</td></tr>
+          <tr><td>Delivery</td><td>2–5 business days</td></tr>
+          <tr><td>SKU</td><td>${p.id?.slice(0,8).toUpperCase() || 'SMKT0001'}</td></tr>
+        </table>
+      </div>
+    </details>
+  `;
+
+  // Qty controls
+  document.getElementById('qty-minus').addEventListener('click', () => {
+    if (qty > 1) { qty--; document.getElementById('qty-display').textContent = qty; }
+  });
+  document.getElementById('qty-plus').addEventListener('click', () => {
+    if (qty < (p.stock || 99)) { qty++; document.getElementById('qty-display').textContent = qty; }
+  });
+
+  // Add to cart
+  document.getElementById('atc-btn').addEventListener('click', () => {
+    addToCart({ id: p.id, name: p.name, price: p.price, image: img, seller: p.seller }, qty);
+    toast('Added to Cart! 🛒', `${qty} × ${p.name}`, 'success');
+    const mainImg = document.getElementById('main-img');
+    const cartBadge = document.getElementById('cart-badge');
+    cartFlyAnimation(mainImg, cartBadge);
+    updateCartBadge();
+  });
+
+  // Buy now
+  document.getElementById('buy-now-btn').addEventListener('click', () => {
+    addToCart({ id: p.id, name: p.name, price: p.price, image: img, seller: p.seller }, qty);
+    window.location.href = 'checkout.html';
+  });
+}
+
+// Thumbnail switcher exposed globally
+window.switchImg = (src, el) => {
+  document.getElementById('main-img').src = src;
+  document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+};
+
+loadProduct();
+</script>
+</body>
+</html>

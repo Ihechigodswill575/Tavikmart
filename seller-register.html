@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Become a Seller — ShopMKT</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/auth.css">
+</head>
+<body class="auth-body">
+<div class="auth-bg">
+  <div class="auth-blob b1"></div>
+  <div class="auth-blob b2"></div>
+  <div class="auth-grid"></div>
+</div>
+
+<header class="auth-header">
+  <a href="../index.html" class="navbar-logo">Shop<span>MKT</span></a>
+  <a href="login.html" class="btn btn-ghost btn-sm">Already have an account?</a>
+</header>
+
+<!-- Hero pitch -->
+<div style="text-align:center;padding:40px 20px 20px;position:relative;z-index:10">
+  <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(245,166,35,0.1);border:1px solid var(--border-accent);border-radius:30px;padding:6px 16px;font-size:0.82rem;color:var(--primary);margin-bottom:16px">
+    🚀 Join 12,000+ sellers on ShopMKT
+  </div>
+  <h1 style="font-size:clamp(1.8rem,4vw,2.8rem);max-width:600px;margin:0 auto 12px">Start Selling on <span style="color:var(--primary)">ShopMKT</span> Today</h1>
+  <p style="color:var(--text-muted);max-width:480px;margin:0 auto 32px;font-size:0.95rem">Reach millions of buyers across Nigeria. No listing fees. Set up your store in minutes.</p>
+  <div style="display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:40px">
+    <div style="text-align:center"><div style="font-size:1.6rem;font-weight:800;font-family:'Syne',sans-serif;color:var(--primary)">₦0</div><div style="font-size:0.8rem;color:var(--text-muted)">Listing Fee</div></div>
+    <div style="text-align:center"><div style="font-size:1.6rem;font-weight:800;font-family:'Syne',sans-serif;color:var(--primary)">10%</div><div style="font-size:0.8rem;color:var(--text-muted)">Commission Only</div></div>
+    <div style="text-align:center"><div style="font-size:1.6rem;font-weight:800;font-family:'Syne',sans-serif;color:var(--primary)">24h</div><div style="font-size:0.8rem;color:var(--text-muted)">Payout Cycle</div></div>
+    <div style="text-align:center"><div style="font-size:1.6rem;font-weight:800;font-family:'Syne',sans-serif;color:var(--primary)">500K+</div><div style="font-size:0.8rem;color:var(--text-muted)">Active Buyers</div></div>
+  </div>
+</div>
+
+<main class="auth-main page-enter" style="align-items:flex-start">
+  <div class="auth-card" style="max-width:520px;margin:0 auto">
+    <div class="auth-card-top">
+      <h2 class="auth-title" style="font-size:1.5rem">🏪 Create Your Store</h2>
+      <p class="auth-sub">Fill in your details to get started</p>
+    </div>
+
+    <!-- Steps indicator -->
+    <div class="reg-steps" style="margin-bottom:24px">
+      <div class="reg-step active" id="step1-ind"><div class="step-num">1</div><div class="step-label">Account</div></div>
+      <div class="reg-step" id="step2-ind"><div class="step-num">2</div><div class="step-label">Business</div></div>
+      <div class="reg-step" id="step3-ind"><div class="step-num">3</div><div class="step-label">Done</div></div>
+    </div>
+
+    <!-- Step 1: Account -->
+    <div id="step-1" style="display:flex;flex-direction:column;gap:16px">
+      <div class="form-group">
+        <label class="form-label">Your Full Name *</label>
+        <div class="input-wrapper">
+          <span class="input-icon">👤</span>
+          <input class="form-input" id="s-fname" placeholder="John Doe" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address *</label>
+        <div class="input-wrapper">
+          <span class="input-icon">✉️</span>
+          <input type="email" class="form-input" id="s-email" placeholder="you@business.com" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone Number *</label>
+        <div class="input-wrapper">
+          <span class="input-icon">📞</span>
+          <input type="tel" class="form-input" id="s-phone" placeholder="+234 800 000 0000" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password *</label>
+        <div class="input-wrapper">
+          <span class="input-icon">🔒</span>
+          <input type="password" class="form-input" id="s-pass" placeholder="Min 6 characters" required>
+          <button type="button" class="eye-toggle" id="s-eye">👁️</button>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full btn-lg" id="step1-next">Continue →</button>
+    </div>
+
+    <!-- Step 2: Business -->
+    <div id="step-2" style="display:none;flex-direction:column;gap:16px">
+      <div class="form-group">
+        <label class="form-label">Business / Store Name *</label>
+        <div class="input-wrapper">
+          <span class="input-icon">🏢</span>
+          <input class="form-input" id="s-bname" placeholder="e.g. TechHub NG" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Business Category *</label>
+        <select class="form-input" id="s-bcat" required>
+          <option value="">Select your main category…</option>
+          <option value="electronics">📱 Electronics</option>
+          <option value="fashion">👗 Fashion & Apparel</option>
+          <option value="home">🏠 Home & Living</option>
+          <option value="beauty">💄 Beauty & Personal Care</option>
+          <option value="sports">⚽ Sports & Outdoors</option>
+          <option value="food">🍎 Food & Drinks</option>
+          <option value="auto">🚗 Auto & Motors</option>
+          <option value="books">📚 Books & Stationery</option>
+          <option value="other">🏷️ Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Business Address</label>
+        <input class="form-input" id="s-baddr" placeholder="12 Commercial Avenue, Lagos">
+      </div>
+      <div class="form-group">
+        <label class="form-label">About Your Business *</label>
+        <textarea class="form-input" id="s-bdesc" rows="4" placeholder="Tell buyers what you sell and why they should shop from you…" style="resize:vertical" required></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">CAC / Business Registration Number (optional)</label>
+        <input class="form-input" id="s-cac" placeholder="RC 0000000">
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost btn-lg" id="step2-back">← Back</button>
+        <button class="btn btn-primary btn-lg" id="step2-submit" style="flex:1">
+          <span class="btn-text">🏪 Create My Store</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: Success -->
+    <div id="step-3" style="display:none;text-align:center;padding:20px 0">
+      <div style="font-size:4rem;margin-bottom:16px;animation:scaleIn 0.5s cubic-bezier(0.34,1.56,0.64,1)">🎉</div>
+      <h2 style="margin-bottom:10px">You're All Set!</h2>
+      <p style="color:var(--text-muted);margin-bottom:24px">Your seller account has been created. Start adding products to your store.</p>
+      <a href="seller-dashboard.html" class="btn btn-primary btn-lg btn-full">Go to Seller Dashboard →</a>
+    </div>
+
+    <div id="auth-error" class="auth-error hidden"></div>
+  </div>
+</main>
+
+<div id="toast-container"></div>
+
+<style>
+@keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
+</style>
+
+<script type="module">
+import { registerUser, toast, btnLoading } from '../js/app.js';
+
+// Eye toggle
+document.getElementById('s-eye').addEventListener('click', () => {
+  const p = document.getElementById('s-pass');
+  const show = p.type === 'password';
+  p.type = show ? 'text' : 'password';
+  document.getElementById('s-eye').textContent = show ? '🙈' : '👁️';
+});
+
+// Step 1 → 2
+document.getElementById('step1-next').addEventListener('click', () => {
+  const name = document.getElementById('s-fname').value.trim();
+  const email = document.getElementById('s-email').value.trim();
+  const phone = document.getElementById('s-phone').value.trim();
+  const pass = document.getElementById('s-pass').value;
+
+  if (!name || !email || !phone || pass.length < 6) {
+    toast('Complete All Fields', 'Please fill in all required fields correctly.', 'warning');
+    return;
+  }
+
+  document.getElementById('step-1').style.display = 'none';
+  document.getElementById('step-2').style.display = 'flex';
+  document.getElementById('step1-ind').classList.remove('active');
+  document.getElementById('step1-ind').classList.add('done');
+  document.getElementById('step1-ind').querySelector('.step-num').textContent = '✓';
+  document.getElementById('step2-ind').classList.add('active');
+});
+
+// Step 2 → back
+document.getElementById('step2-back').addEventListener('click', () => {
+  document.getElementById('step-2').style.display = 'none';
+  document.getElementById('step-1').style.display = 'flex';
+  document.getElementById('step2-ind').classList.remove('active');
+  document.getElementById('step1-ind').classList.remove('done');
+  document.getElementById('step1-ind').classList.add('active');
+  document.getElementById('step1-ind').querySelector('.step-num').textContent = '1';
+});
+
+// Step 2 submit
+document.getElementById('step2-submit').addEventListener('click', async () => {
+  const bname = document.getElementById('s-bname').value.trim();
+  const bcat = document.getElementById('s-bcat').value;
+  const bdesc = document.getElementById('s-bdesc').value.trim();
+
+  if (!bname || !bcat || !bdesc) {
+    toast('Missing Fields', 'Please fill in all required business details.', 'warning');
+    return;
+  }
+
+  const btn = document.getElementById('step2-submit');
+  btnLoading(btn, true);
+
+  const name = document.getElementById('s-fname').value.trim();
+  const email = document.getElementById('s-email').value.trim();
+  const pass = document.getElementById('s-pass').value;
+
+  try {
+    await registerUser({
+      email, password: pass, name, role: 'seller',
+      extra: {
+        businessName: bname,
+        businessCategory: bcat,
+        businessAddress: document.getElementById('s-baddr').value.trim(),
+        businessDescription: bdesc,
+        businessPhone: document.getElementById('s-phone').value.trim(),
+        cacNumber: document.getElementById('s-cac').value.trim(),
+        verified: false,
+      }
+    });
+
+    btnLoading(btn, false);
+    document.getElementById('step-2').style.display = 'none';
+    document.getElementById('step-3').style.display = 'block';
+    document.getElementById('step2-ind').classList.remove('active');
+    document.getElementById('step2-ind').classList.add('done');
+    document.getElementById('step2-ind').querySelector('.step-num').textContent = '✓';
+    document.getElementById('step3-ind').classList.add('active');
+    toast('Store Created! 🎉', 'Welcome to ShopMKT Sellers!', 'success');
+  } catch(err) {
+    btnLoading(btn, false);
+    const msgs = {
+      'auth/email-already-in-use': 'This email is already registered.',
+      'auth/weak-password': 'Password is too weak.',
+    };
+    const msg = msgs[err.code] || err.message;
+    document.getElementById('auth-error').textContent = '⚠️ ' + msg;
+    document.getElementById('auth-error').classList.remove('hidden');
+    toast('Registration Failed', msg, 'error');
+  }
+});
+</script>
+</body>
+</html>

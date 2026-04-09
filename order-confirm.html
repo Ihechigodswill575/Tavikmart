@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed — ShopMKT</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <style>
+    .confirm-wrap { max-width: 680px; margin: 60px auto 100px; text-align: center; }
+    .success-icon { width: 90px; height: 90px; border-radius: 50%; background: rgba(46,204,113,0.12); border: 3px solid var(--success); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 24px; animation: scaleIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes scaleIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .confirm-title { font-size: 2rem; margin-bottom: 10px; }
+    .confirm-sub { color: var(--text-muted); font-size: 1rem; margin-bottom: 32px; }
+    .order-info-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: left; margin-bottom: 24px; overflow: hidden; }
+    .oic-header { padding: 16px 22px; background: var(--surface-2); border-bottom: 1px solid var(--border); }
+    .oic-id { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--primary); }
+    .oic-body { padding: 20px 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .oic-field-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .oic-field-val { font-size: 0.9rem; font-weight: 500; }
+    .steps-track { display: flex; justify-content: space-between; position: relative; padding: 20px 0; }
+    .steps-track::before { content: ''; position: absolute; top: 34px; left: 10%; right: 10%; height: 2px; background: var(--border); z-index: 0; }
+    .step-node { display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; z-index: 1; flex: 1; }
+    .step-circle { width: 36px; height: 36px; border-radius: 50%; background: var(--surface-3); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: var(--transition); }
+    .step-circle.active { background: var(--primary); border-color: var(--primary); }
+    .step-circle.done { background: var(--success); border-color: var(--success); }
+    .step-label { font-size: 0.72rem; color: var(--text-dim); text-align: center; }
+    .step-node.active .step-label { color: var(--primary); font-weight: 600; }
+    .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+  </style>
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="container">
+  <div class="confirm-wrap page-enter">
+    <div class="success-icon">🎉</div>
+    <h1 class="confirm-title">Order Placed!</h1>
+    <p class="confirm-sub">Thank you for shopping with ShopMKT. Your order has been received and is being processed.</p>
+
+    <div class="order-info-card">
+      <div class="oic-header">
+        <div class="oic-id" id="order-id-display">ORD-LOADING</div>
+        <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px" id="order-date-display">—</div>
+      </div>
+      <div class="oic-body">
+        <div>
+          <div class="oic-field-label">Status</div>
+          <div class="oic-field-val"><span style="background:rgba(243,156,18,0.12);color:var(--warning);padding:3px 10px;border-radius:20px;font-size:0.8rem">🟡 Pending</span></div>
+        </div>
+        <div>
+          <div class="oic-field-label">Payment</div>
+          <div class="oic-field-val" id="payment-display">—</div>
+        </div>
+        <div>
+          <div class="oic-field-label">Delivery Address</div>
+          <div class="oic-field-val" id="address-display">—</div>
+        </div>
+        <div>
+          <div class="oic-field-label">Total Amount</div>
+          <div class="oic-field-val" id="total-display" style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--primary)">₦0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tracking Steps -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px">
+      <h3 style="font-size:1rem;margin-bottom:4px">Order Tracking</h3>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:20px">Your order will move through the following stages:</p>
+      <div class="steps-track">
+        <div class="step-node active">
+          <div class="step-circle active">✓</div>
+          <div class="step-label">Order Placed</div>
+        </div>
+        <div class="step-node">
+          <div class="step-circle">🔵</div>
+          <div class="step-label">Processing</div>
+        </div>
+        <div class="step-node">
+          <div class="step-circle">📦</div>
+          <div class="step-label">Ready for Pickup</div>
+        </div>
+        <div class="step-node">
+          <div class="step-circle">🚚</div>
+          <div class="step-label">Shipped</div>
+        </div>
+        <div class="step-node">
+          <div class="step-circle">🏠</div>
+          <div class="step-label">Delivered</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- What's next -->
+    <div style="background:rgba(245,166,35,0.06);border:1px solid var(--border-accent);border-radius:var(--radius);padding:20px;text-align:left;margin-bottom:20px">
+      <h3 style="font-size:0.95rem;margin-bottom:12px">📧 What happens next?</h3>
+      <ul style="display:flex;flex-direction:column;gap:8px;list-style:none">
+        <li style="font-size:0.875rem;color:var(--text-muted);display:flex;gap:8px"><span>✅</span> Order confirmation sent to your email</li>
+        <li style="font-size:0.875rem;color:var(--text-muted);display:flex;gap:8px"><span>🏪</span> Seller will prepare your items</li>
+        <li style="font-size:0.875rem;color:var(--text-muted);display:flex;gap:8px"><span>🚚</span> Delivery within 2–5 business days</li>
+        <li style="font-size:0.875rem;color:var(--text-muted);display:flex;gap:8px"><span>📞</span> Our team will contact you for Cash on Delivery</li>
+      </ul>
+    </div>
+
+    <div class="cta-row">
+      <a href="buyer-dashboard.html" class="btn btn-primary btn-lg">📦 Track My Orders</a>
+      <a href="../index.html" class="btn btn-outline btn-lg">🛍️ Continue Shopping</a>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script type="module">
+import { buildNavbar, formatPrice, updateNavUI } from '../js/app.js';
+import { db } from '../js/firebase-config.js';
+import { collection, query, where, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+document.getElementById('nav-root').innerHTML = buildNavbar();
+updateNavUI();
+
+const params = new URLSearchParams(window.location.search);
+const orderId = params.get('id');
+
+async function loadOrder() {
+  if (!orderId) {
+    document.getElementById('order-id-display').textContent = 'Order Not Found';
+    return;
+  }
+
+  document.getElementById('order-id-display').textContent = orderId;
+
+  try {
+    const q = query(collection(db, 'orders'), where('orderId', '==', orderId), limit(1));
+    const snap = await getDocs(q);
+    if (snap.empty) return;
+
+    const order = snap.docs[0].data();
+
+    const date = order.createdAt?.toDate ? order.createdAt.toDate() : new Date();
+    document.getElementById('order-date-display').textContent = date.toLocaleDateString('en-NG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+    document.getElementById('payment-display').textContent = order.paymentMethod === 'paystack' ? '💳 Paid Online' : '💵 Cash on Delivery';
+    document.getElementById('total-display').textContent = formatPrice(order.total || 0);
+
+    if (order.address) {
+      document.getElementById('address-display').textContent = `${order.address.street}, ${order.address.city}, ${order.address.state}`;
+    }
+  } catch(e) {
+    console.error(e);
+  }
+}
+
+loadOrder();
+</script>
+</body>
+</html>
