@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — TAVIKMART</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <style>
+    .checkout-layout { display: grid; grid-template-columns: 1fr 380px; gap: 28px; margin: 40px 0 80px; }
+    .checkout-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; }
+    .checkout-section-title { padding: 18px 24px; border-bottom: 1px solid var(--border); font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+    .checkout-section-body { padding: 24px; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .payment-opts { display: flex; flex-direction: column; gap: 12px; }
+    .payment-opt { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border: 2px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); }
+    .payment-opt:hover { border-color: var(--border-accent); }
+    .payment-opt.selected { border-color: var(--primary); background: rgba(245,166,35,0.06); }
+    .payment-opt input[type=radio] { accent-color: var(--primary); width: 18px; height: 18px; }
+    .payment-opt-icon { font-size: 1.6rem; }
+    .payment-opt-name { font-weight: 600; font-size: 0.9rem; }
+    .payment-opt-desc { font-size: 0.78rem; color: var(--text-muted); }
+    .order-summary-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .order-summary-item:last-child { border-bottom: none; }
+    .osi-img { width: 56px; height: 56px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: var(--surface-2); }
+    .osi-img img { width: 100%; height: 100%; object-fit: cover; }
+    .osi-name { font-size: 0.85rem; font-weight: 500; margin-bottom: 4px; }
+    .osi-price { font-size: 0.82rem; color: var(--primary); }
+    @media (max-width: 900px) { .checkout-layout { grid-template-columns: 1fr; } .form-row-2 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="container">
+  <div style="margin:30px 0 20px;font-size:0.875rem;color:var(--text-muted)">
+    <a href="../index.html" style="color:var(--primary)">Home</a> ›
+    <a href="cart.html" style="color:var(--primary)">Cart</a> › Checkout
+  </div>
+
+  <div class="reg-steps" style="max-width:500px;margin:0 auto 30px">
+    <div class="reg-step done"><div class="step-num">✓</div><div class="step-label">Cart</div></div>
+    <div class="reg-step active"><div class="step-num">2</div><div class="step-label">Checkout</div></div>
+    <div class="reg-step"><div class="step-num">3</div><div class="step-label">Confirmation</div></div>
+  </div>
+
+  <div class="checkout-layout">
+    <!-- Left: Forms -->
+    <div>
+      <div class="checkout-card">
+        <div class="checkout-section-title">📍 Delivery Address</div>
+        <div class="checkout-section-body">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="form-row-2">
+              <div class="form-group"><label class="form-label">First Name</label><input class="form-input" id="fname" placeholder="John" required></div>
+              <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" id="lname" placeholder="Doe" required></div>
+            </div>
+            <div class="form-group"><label class="form-label">Phone Number</label><div class="input-wrapper"><span class="input-icon">📞</span><input class="form-input" id="phone" type="tel" placeholder="+234 800 000 0000" required></div></div>
+            <div class="form-group"><label class="form-label">Email Address</label><div class="input-wrapper"><span class="input-icon">✉️</span><input class="form-input" id="chk-email" type="email" placeholder="for order receipt" required></div></div>
+            <div class="form-group"><label class="form-label">Street Address</label><input class="form-input" id="address" placeholder="12 Commercial Avenue, Lagos" required></div>
+            <div class="form-row-2">
+              <div class="form-group"><label class="form-label">City</label><input class="form-input" id="city" placeholder="Lagos" required></div>
+              <div class="form-group"><label class="form-label">State</label>
+                <select class="form-input" id="state" required>
+                  <option value="">Select state…</option>
+                  <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option><option>Anambra</option><option>Bauchi</option><option>Bayelsa</option><option>Benue</option><option>Borno</option><option>Cross River</option><option>Delta</option><option>Ebonyi</option><option>Edo</option><option>Ekiti</option><option>Enugu</option><option>FCT</option><option>Gombe</option><option>Imo</option><option>Jigawa</option><option>Kaduna</option><option>Kano</option><option>Katsina</option><option>Kebbi</option><option>Kogi</option><option>Kwara</option><option selected>Lagos</option><option>Nasarawa</option><option>Niger</option><option>Ogun</option><option>Ondo</option><option>Osun</option><option>Oyo</option><option>Plateau</option><option>Rivers</option><option>Sokoto</option><option>Taraba</option><option>Yobe</option><option>Zamfara</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group"><label class="form-label">Additional Notes (optional)</label><textarea class="form-input" id="notes" rows="2" placeholder="Delivery instructions, landmarks…" style="resize:vertical"></textarea></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="checkout-card">
+        <div class="checkout-section-title">💳 Payment Method</div>
+        <div class="checkout-section-body">
+          <div class="payment-opts">
+            <label class="payment-opt selected" id="cod-opt">
+              <input type="radio" name="payment" value="cod" checked>
+              <span class="payment-opt-icon">💵</span>
+              <div><div class="payment-opt-name">Cash on Delivery</div><div class="payment-opt-desc">Pay when your order arrives</div></div>
+            </label>
+            <label class="payment-opt" id="paystack-opt">
+              <input type="radio" name="payment" value="paystack">
+              <span class="payment-opt-icon">💳</span>
+              <div><div class="payment-opt-name">Pay Online (Paystack)</div><div class="payment-opt-desc">Card, bank transfer, USSD — instant &amp; secure</div></div>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Summary -->
+    <div>
+      <div class="checkout-card" style="padding:24px">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:18px">Order Summary</div>
+        <div id="order-items" style="max-height:280px;overflow-y:auto;margin-bottom:16px"></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.9rem;margin-bottom:10px;color:var(--text-muted)"><span>Subtotal</span><span id="sum-subtotal"></span></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.9rem;margin-bottom:10px;color:var(--text-muted)"><span>Shipping</span><span id="sum-shipping"></span></div>
+        <div style="display:flex;justify-content:space-between;font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;border-top:1px solid var(--border);padding-top:14px;margin-top:4px"><span>Total</span><span style="color:var(--primary)" id="sum-total"></span></div>
+
+        <button class="btn btn-primary btn-full btn-lg" id="place-order-btn" style="margin-top:24px">
+          <span class="btn-text" id="place-order-text">Place Order</span>
+        </button>
+        <p style="font-size:0.75rem;color:var(--text-dim);text-align:center;margin-top:10px">🔒 Your payment is encrypted and secure</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script type="module">
+import { buildNavbar, getCart, getCartTotal, clearCart, createOrder, formatPrice, toast, btnLoading, state, updateNavUI, updateCartBadge } from '../js/app.js';
+
+document.getElementById('nav-root').innerHTML = buildNavbar();
+updateNavUI();
+updateCartBadge();
+
+const cart = getCart();
+const shipping = parseInt(localStorage.getItem('tavikmart_shipping') || '1500');
+const subtotal = getCartTotal();
+const total = subtotal + shipping;
+
+// Fill summary
+document.getElementById('order-items').innerHTML = cart.map(item => `
+  <div class="order-summary-item">
+    <div class="osi-img"><img src="${item.image || ''}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/56/252535/F5A623?text=P'"></div>
+    <div><div class="osi-name">${item.name} × ${item.qty}</div><div class="osi-price">${formatPrice(item.price * item.qty)}</div></div>
+  </div>`).join('');
+
+document.getElementById('sum-subtotal').textContent = formatPrice(subtotal);
+document.getElementById('sum-shipping').textContent = formatPrice(shipping);
+document.getElementById('sum-total').textContent = formatPrice(total);
+
+// Pre-fill email/name if logged in
+document.addEventListener('auth-changed', (e) => {
+  const { user } = e.detail;
+  if (user) {
+    document.getElementById('chk-email').value = user.email || '';
+    if (user.displayName) {
+      const parts = user.displayName.split(' ');
+      document.getElementById('fname').value = parts[0] || '';
+      document.getElementById('lname').value = parts.slice(1).join(' ') || '';
+    }
+  }
+});
+
+// Payment option selection
+document.querySelectorAll('.payment-opt').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('.payment-opt').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+    const method = opt.querySelector('input').value;
+    document.getElementById('place-order-text').textContent = method === 'paystack' ? 'Pay Now →' : 'Place Order';
+  });
+});
+
+function getOrderData() {
+  return {
+    buyerId: state.user?.uid || 'guest',
+    buyerEmail: document.getElementById('chk-email').value,
+    buyerName: `${document.getElementById('fname').value} ${document.getElementById('lname').value}`.trim(),
+    shippingAddress: {
+      fullName: `${document.getElementById('fname').value} ${document.getElementById('lname').value}`.trim(),
+      phone: document.getElementById('phone').value,
+      street: document.getElementById('address').value,
+      address: document.getElementById('address').value,
+      city: document.getElementById('city').value,
+      state: document.getElementById('state').value,
+      notes: document.getElementById('notes').value,
+    },
+    items: cart.map(i => ({ productId: i.id, name: i.name, price: i.price, quantity: i.qty, image: i.image || '' })),
+    subtotal, shipping, total,
+    paymentMethod: document.querySelector('input[name=payment]:checked').value,
+  };
+}
+
+function validateForm() {
+  const fields = ['fname', 'lname', 'phone', 'chk-email', 'address', 'city', 'state'];
+  for (const id of fields) {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      el.classList.add('error');
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      toast('Missing Fields', 'Please fill in all required fields.', 'warning');
+      setTimeout(() => el.classList.remove('error'), 2000);
+      return false;
+    }
+  }
+  return true;
+}
+
+async function placeOrderCOD() {
+  const btn = document.getElementById('place-order-btn');
+  btnLoading(btn, true);
+  try {
+    const data = getOrderData();
+    const { orderId } = await createOrder(data);
+    clearCart();
+    toast('Order Placed! 🎉', `Order ID: ${orderId}`, 'success');
+    setTimeout(() => window.location.href = `order-confirm.html?id=${orderId}`, 1500);
+  } catch (e) {
+    btnLoading(btn, false);
+    toast('Order Failed', e.message, 'error');
+  }
+}
+
+function placeOrderPaystack() {
+  const email = document.getElementById('chk-email').value;
+  // Use the Paystack public key from your dashboard
+  const paystackPublicKey = window.PAYSTACK_PUBLIC_KEY || 'pk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+
+  if (paystackPublicKey.includes('xxxxxxxx')) {
+    toast('Configuration Error', 'Paystack public key not configured. Please set window.PAYSTACK_PUBLIC_KEY.', 'error');
+    return;
+  }
+
+  const handler = PaystackPop.setup({
+    key: paystackPublicKey,
+    email,
+    amount: total * 100, // Paystack uses kobo
+    currency: 'NGN',
+    ref: 'TVM-' + Date.now(),
+    metadata: {
+      cart_items: cart.length,
+      buyer_name: `${document.getElementById('fname').value} ${document.getElementById('lname').value}`.trim(),
+    },
+    callback: async (response) => {
+      const btn = document.getElementById('place-order-btn');
+      btnLoading(btn, true);
+      try {
+        const data = {
+          ...getOrderData(),
+          transactionRef: response.reference,
+          paymentStatus: 'paid',
+        };
+        const { orderId } = await createOrder(data);
+        clearCart();
+        toast('Payment Successful! 🎉', `Order ID: ${orderId}`, 'success');
+        setTimeout(() => window.location.href = `order-confirm.html?id=${orderId}`, 1500);
+      } catch (e) {
+        btnLoading(btn, false);
+        toast('Error saving order', e.message, 'error');
+      }
+    },
+    onClose: () => toast('Payment Cancelled', 'You closed the payment window.', 'warning'),
+  });
+  handler.openIframe();
+}
+
+document.getElementById('place-order-btn').addEventListener('click', () => {
+  if (!validateForm()) return;
+  if (cart.length === 0) { toast('Empty Cart', 'Add products to your cart first.', 'warning'); return; }
+  const method = document.querySelector('input[name=payment]:checked').value;
+  if (method === 'paystack') placeOrderPaystack();
+  else placeOrderCOD();
+});
+</script>
+</body>
+</html>
